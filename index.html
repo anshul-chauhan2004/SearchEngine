@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Professional Search Engine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+        :root {
+            --primary-color: #4A90E2;
+            --background-color: #F4F6F9;
+            --text-color: #2D2D2D;
+            --border-color: #e0e0e0;
+            --button-hover: #357ABD;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
+        }
+
+        #searchButton {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #searchButton:hover {
+            background-color: var(--button-hover);
+        }
+
+        .history-container {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .history-container h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        #searchHistory {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #searchHistory li {
+            background-color: var(--background-color);
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #clearHistoryButton {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #E74C3C;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        #clearHistoryButton:hover {
+            background-color: #C0392B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Professional Search</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="What are you looking for?">
+            <button id="searchButton">Search</button>
+        </div>
+        <div class="history-container">
+            <h2>Recent Searches</h2>
+            <ul id="searchHistory"></ul>
+            <button id="clearHistoryButton">Clear History</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const searchHistory = document.getElementById('searchHistory');
+            const clearHistoryButton = document.getElementById('clearHistoryButton');
+
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+            function updateHistory() {
+                searchHistory.innerHTML = '';
+                history.forEach(term => {
+                    const li = document.createElement('li');
+                    li.textContent = term;
+                    searchHistory.appendChild(li);
+                });
+            }
+
+            function addToHistory(term) {
+                if (!history.includes(term)) {
+                    history.unshift(term);
+                    if (history.length > 5) {
+                        history.pop();
+                    }
+                    localStorage.setItem('searchHistory', JSON.stringify(history));
+                    updateHistory();
+                }
+            }
+
+            function clearHistory() {
+                history = [];
+                localStorage.removeItem('searchHistory');
+                updateHistory();
+            }
+
+            function simulateSearch(term) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(`Search results for: ${term}`);
+                    }, 500);
+                });
+            }
+
+            searchButton.addEventListener('click', async () => {
+                const searchTerm = searchInput.value.trim();
+                if (searchTerm) {
+                    try {
+                        const result = await simulateSearch(searchTerm);
+                        console.log(result);
+                        addToHistory(searchTerm);
+                    } catch (error) {
+                        console.error('Search failed:', error);
+                    } finally {
+                        searchInput.value = '';
+                    }
+                }
+            });
+
+            clearHistoryButton.addEventListener('click', clearHistory);
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+
+            // Initial render of search history
+            updateHistory();
+        });
+    </script>
+</body>
+</html>
