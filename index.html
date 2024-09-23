@@ -3,45 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Professional Search Engine</title>
+    <title>Advanced Search Engine</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
         :root {
             --primary-color: #4A90E2;
-            --background-color: #F4F6F9;
-            --text-color: #2D2D2D;
-            --border-color: #e0e0e0;
+            --background-color: rgba(0, 0, 0, 0.7);
+            --text-color: #FFFFFF;
+            --border-color: #4A4A4A;
             --button-hover: #357ABD;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
+            background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
 
         .container {
-            background-color: #fff;
+            background-color: var(--background-color);
             padding: 40px;
-            max-width: 450px;
+            max-width: 500px;
             width: 100%;
             border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 600;
             margin-bottom: 25px;
-            color: var(--primary-color);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.5s ease forwards;
         }
 
         .search-container {
@@ -49,41 +63,48 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 20px;
+            position: relative;
         }
 
         #searchInput {
             width: 100%;
-            padding: 12px;
+            padding: 12px 50px 12px 20px;
             font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
             border: 1px solid var(--border-color);
             border-radius: 50px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         #searchInput:focus {
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
         }
 
         #searchButton {
-            padding: 12px 24px;
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px;
             font-size: 16px;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 50px;
-            margin-left: 10px;
+            border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         #searchButton:hover {
             background-color: var(--button-hover);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .history-container {
             margin-top: 30px;
-            text-align: left;
         }
 
         .history-container h2 {
@@ -99,15 +120,34 @@
         }
 
         #searchHistory li {
-            background-color: var(--background-color);
+            background-color: rgba(255, 255, 255, 0.1);
             margin-bottom: 10px;
-            padding: 10px;
+            padding: 10px 15px;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: fadeInLeft 0.3s ease forwards;
+        }
+
+        #searchHistory li button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        #searchHistory li button:hover {
+            color: rgba(255, 255, 255, 0.8);
         }
 
         #clearHistoryButton {
-            display: inline-block;
+            display: block;
+            width: 100%;
             padding: 10px 20px;
             font-size: 14px;
             background-color: #E74C3C;
@@ -115,22 +155,64 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards 0.3s;
         }
 
         #clearHistoryButton:hover {
             background-color: #C0392B;
         }
+
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .searching {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            opacity: 0;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                opacity: 0.5;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Professional Search</h1>
+        <h1>Advanced Search</h1>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="What are you looking for?">
-            <button id="searchButton">Search</button>
+            <button id="searchButton">🔍</button>
         </div>
+        <div id="searchingIndicator" class="searching" style="display: none;">Searching...</div>
         <div class="history-container">
             <h2>Recent Searches</h2>
             <ul id="searchHistory"></ul>
@@ -144,27 +226,28 @@
             const searchButton = document.getElementById('searchButton');
             const searchHistory = document.getElementById('searchHistory');
             const clearHistoryButton = document.getElementById('clearHistoryButton');
+            const searchingIndicator = document.getElementById('searchingIndicator');
 
             let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
 
             function updateHistory() {
                 searchHistory.innerHTML = '';
-                history.forEach(term => {
+                history.forEach((term, index) => {
                     const li = document.createElement('li');
-                    li.textContent = term;
+                    li.innerHTML = `
+                        ${term}
+                        <button class="remove-item" data-index="${index}">×</button>
+                    `;
+                    li.style.animationDelay = `${index * 0.1}s`;
                     searchHistory.appendChild(li);
                 });
+                clearHistoryButton.style.display = history.length ? 'block' : 'none';
             }
 
             function addToHistory(term) {
-                if (!history.includes(term)) {
-                    history.unshift(term);
-                    if (history.length > 5) {
-                        history.pop();
-                    }
-                    localStorage.setItem('searchHistory', JSON.stringify(history));
-                    updateHistory();
-                }
+                history = [term, ...history.filter(item => item !== term)].slice(0, 5);
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+                updateHistory();
             }
 
             function clearHistory() {
@@ -175,9 +258,11 @@
 
             function simulateSearch(term) {
                 return new Promise((resolve) => {
+                    searchingIndicator.style.display = 'block';
                     setTimeout(() => {
+                        searchingIndicator.style.display = 'none';
                         resolve(`Search results for: ${term}`);
-                    }, 500);
+                    }, 1500);
                 });
             }
 
@@ -201,6 +286,15 @@
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     searchButton.click();
+                }
+            });
+
+            searchHistory.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-item')) {
+                    const index = parseInt(e.target.getAttribute('data-index'));
+                    history.splice(index, 1);
+                    localStorage.setItem('searchHistory', JSON.stringify(history));
+                    updateHistory();
                 }
             });
 
